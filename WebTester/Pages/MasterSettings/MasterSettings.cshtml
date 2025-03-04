@@ -1,0 +1,34 @@
+﻿@page
+@model WebTester.Pages.MasterSettings.MasterSettingsModel
+@{
+    ViewData["Title"] = "Master Settings";
+}
+
+<h2>Master Settings</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+<form method="post">
+    <div class="mb-3">
+        <label class="form-label" for="SendAs">Send As</label>
+        <input asp-for="SendAs" class="form-control" id="SendAs" />
+        <span asp-validation-for="SendAs" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="OrganizationId">Organization</label>
+        <select asp-for="OrganizationId" class="form-control" id="OrganizationId">
+            <option value="">Select an organization</option>
+            @foreach (var org in Model.Organizations)
+            {
+                <option value="@org.Id">@org.Title</option>
+            }
+        </select>
+        <span asp-validation-for="OrganizationId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

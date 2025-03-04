@@ -1,0 +1,44 @@
+﻿@page "{id?}"
+@model WebTester.Pages.ServicesProvided.EditModel
+@{
+    ViewData["Title"] = Model.IsNew ? "Add Service" : "Edit Service";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="Service.Id" />
+
+    <div class="mb-3">
+        <label asp-for="Service.Name" class="form-label">Service Name</label>
+        <input asp-for="Service.Name" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Service.Description" class="form-label">Description</label>
+        <textarea asp-for="Service.Description" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Service.SKU" class="form-label">SKU</label>
+        <input asp-for="Service.SKU" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Service.Customer_Cost" class="form-label">Customer Cost ($)</label>
+        <input asp-for="Service.Customer_Cost" type="number" step="0.01" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Service.Reseller_Cost" class="form-label">Reseller Cost ($)</label>
+        <input asp-for="Service.Reseller_Cost" type="number" step="0.01" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Service.Type" class="form-label">Service Type</label>
+        <select asp-for="Service.Type" asp-items="Model.ServiceTypes" class="form-control"></select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-page="/ServicesProvided/Index" class="btn btn-secondary">Cancel</a>
+</form>

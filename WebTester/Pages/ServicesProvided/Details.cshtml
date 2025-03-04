@@ -1,0 +1,30 @@
+﻿@page "{id:int}"
+@model WebTester.Pages.ServicesProvided.DetailsModel
+@{
+    ViewData["Title"] = "Service Details";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (Model.Service != null)
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Service.Name</h5>
+            <p class="card-text"><strong>Description:</strong> @Model.Service.Description</p>
+            <p class="card-text"><strong>SKU:</strong> @Model.Service.SKU</p>
+            <p class="card-text"><strong>Customer Cost:</strong> $@Model.Service.Customer_Cost</p>
+            <p class="card-text"><strong>Reseller Cost:</strong> $@Model.Service.Reseller_Cost</p>
+            <p class="card-text"><strong>Service Type:</strong> @Model.Service.Type</p>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a asp-page="/ServicesProvided/Edit" asp-route-id="@Model.Service.Id" class="btn btn-primary">Edit</a>
+        <a asp-page="/ServicesProvided/Index" class="btn btn-secondary">Back</a>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">Service not found.</div>
+}

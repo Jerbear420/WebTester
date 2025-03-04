@@ -1,0 +1,27 @@
+﻿@page "/tickets/view/{id:min(1)}"
+@model WebTester.Pages.Tickets.DetailsModel
+@{
+	ViewData["Title"] = "Ticket Details";
+}
+
+<h1>Details</h1>
+
+<div class="row justify-content-center m3"> 
+	<div class="col-sm-8">
+		<div class="card">
+			<div class="card-header">
+				<h1>@Model.Ticket.Name</h1>
+			</div>
+			<div class="card-body text-center">
+				<h4>Ticket Id : @Model.Ticket.Id</h4>
+				<h4>Ticket Name : @Model.Ticket.Name</h4>
+				<h4>Ticket Description : @Model.Ticket.Description</h4>
+			</div>
+			<div class="card-footer text-center">
+				<a asp-page="index" class="btn btn-primary">Back</a>
+				<a asp-page="/Tickets/Edit" asp-route-ID="@Model.Ticket.Id" class="btn btn-primary m-1">Edit</a>
+				<a asp-page="/Tickets/Delete" asp-route-ID="@Model.Ticket.Id" class="btn btn-danger m-1">Delete</a>
+			</div>
+		</div>
+	</div>
+</div>

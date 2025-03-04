@@ -1,0 +1,30 @@
+﻿@page "/ticketnotes/view/{id:min(1)}"
+@model WebTester.Pages.TicketNotes.DetailsModel
+@{
+	ViewData["Title"] = "Ticket Details";
+}
+
+<h1>Details</h1>
+
+<div class="row justify-content-center m3">
+	<div class="col-sm-8">
+		@await Component.InvokeAsync("HeadCount");
+	</div>
+	<div class="col-sm-8">
+		<div class="card">
+			<div class="card-header">
+				<h1>@Model.TicketNote.Name</h1>
+			</div>
+			<div class="card-body text-center">
+				<h4>Ticket Id : @Model.TicketNote.Id</h4>
+				<h4>Ticket Name : @Model.TicketNote.Name</h4>
+				<h4>Ticket Description : @Model.TicketNote.Description</h4>
+			</div>
+			<div class="card-footer text-center">
+				<a asp-page="index" class="btn btn-primary">Back</a>
+				<a href="#" class="btn btn-primary">Edit</a>
+				<a href="#" class="btn btn-primary">Delete</a>
+			</div>
+		</div>
+	</div>
+</div>

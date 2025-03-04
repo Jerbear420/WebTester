@@ -1,0 +1,33 @@
+﻿@page
+@model WebTester.Pages.Shared.AddCustomerModel
+@{
+}
+<form method="post">
+    <fieldset>
+        <legend>Add Customer</legend>
+        <div>
+            <label for="CompanyName">Company Name:</label>
+            <input type="text" name="CompanyName" value="" asp-for="CompanyName" />
+        </div>
+        <div>
+            <label for="ContactName">Contact Name:</label>
+            <input type="text" name="ContactName" value="" asp-for="ContactName" />
+        </div>
+        <div>
+            <label for="Employees">Employee Count:</label>
+            <input type="text" name="Employees" value="" asp-for="Employees" />
+        </div>
+        <div>
+            <label for="Testing">Is Active:</label>
+
+            <input type="checkbox" name="Testing" value="True" asp-for="Testing" />
+
+        </div>
+        
+        <div>
+            <label>&nbsp;</label>
+            <input type="submit" value="Submit" class="submit" />
+        </div>
+
+    </fieldset>
+</form>

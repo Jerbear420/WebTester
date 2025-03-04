@@ -1,0 +1,116 @@
+﻿@using WebTester.Models.Tickets
+@model Ticket
+@{
+    var showButtons = (bool)ViewData["ShowButtons"];
+}
+
+<div class="col-md-4 d-flex align-items-stretch">
+    <div class="card m-3 w-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3>@Model.Name</h3>
+            <button class="btn btn-light p-1" onclick="createTicketNote(@Model.Id)">
+                <img src="/images/clock.png" alt="Clock" width="20" height="20">
+            </button>
+        </div>
+
+        <div class="card-body">
+            <h5 class="card-title">
+                Organization: @(await Component.InvokeAsync("OrganizationName", new { organizationId = Model.OrganizationId }))
+            </h5>
+
+            <p class="card-text">@Model.Description</p>
+
+            <!-- Scrollable List of Ticket Notes -->
+            <div class="scrollable-notes">
+                <ul class="list-group" id="ticket-notes-@Model.Id">
+                    <li class="list-group-item text-muted">Loading notes...</li>
+                </ul>
+            </div>
+        </div>
+
+        @if (showButtons)
+        {
+            <div class="card-footer text-center">
+                <a asp-page="/Tickets/Details" asp-route-ID="@Model.Id" class="btn btn-primary m-1">View</a>
+                <a asp-page="/Tickets/Edit" asp-route-ID="@Model.Id" class="btn btn-primary m-1">Edit</a>
+                <a asp-page="/Tickets/Delete" asp-route-ID="@Model.Id" class="btn btn-danger m-1">Delete</a>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        loadTicketNotes(@Model.Id);
+    });
+
+    function loadTicketNotes(ticketId) {
+        fetch(`/Tickets/GetTicketNotes?ticketId=${ticketId}`)
+            .then(response => response.json())
+            .then(notes => {
+                const notesList = document.getElementById(`ticket-notes-${ticketId}`);
+                notesList.innerHTML = ""; // Clear existing notes
+
+                if (notes.length === 0) {
+                    notesList.innerHTML = "<li class='list-group-item text-muted'>No notes available.</li>";
+                    return;
+                }
+
+                notes.forEach(note => {
+                    const noteItem = document.createElement("li");
+                    noteItem.classList.add("list-group-item");
+                    noteItem.innerHTML = `<strong>${note.name}</strong><br>
+                                          <small class="text-muted">${new Date(note.created).toLocaleString()}</small>
+                                          <p class="mb-0">${note.description}</p>`;
+                    notesList.appendChild(noteItem);
+                });
+            })
+            .catch(error => {
+                console.error("Error loading ticket notes:", error);
+                const notesList = document.getElementById(`ticket-notes-${ticketId}`);
+                notesList.innerHTML = "<li class='list-group-item text-danger'>Error loading notes.</li>";
+            });
+    }
+
+    function createTicketNote(ticketId) {
+        const formData = new URLSearchParams();
+        formData.append("TicketId", ticketId);
+
+        const token = document.querySelector('input[name="__RequestVerificationToken"]');
+
+        fetch('/Ticket/CreateTicketNote', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'RequestVerificationToken': token.value
+            },
+            body: formData.toString()
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(text || `HTTP error! Status: ${response.status}`);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert(data.message || "Ticket note created successfully.");
+            loadTicketNotes(ticketId); // Refresh notes after creation
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            alert(`Error: ${error.message}`);
+        });
+    }
+</script>
+
+<style>
+    .scrollable-notes {
+        max-height: 250px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 5px;
+    }
+</style>

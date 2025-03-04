@@ -1,0 +1,157 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WebTester</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/WebTester.styles.css" asp-append-version="true" />
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <a class="navbar-brand" asp-area="" asp-page="/Index">WebTester</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Form">Form</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Organizations/Index">Organizations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Tickets/Index">Tickets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-page="/Employees/Index">Employees</a>
+                    </li>
+                </ul>
+
+                <!-- Hamburger Menu for My Active Ticket Notes -->
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="myNotesDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        My Active Notes
+                    </button>
+                    <ul class="dropdown-menu" id="myNotesList" aria-labelledby="myNotesDropdown">
+                        <li><span class="dropdown-item">Loading...</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top footer text-muted">
+    <div class="container">
+        &copy; 2025 - WebTester - <a asp-area="" asp-page="/Privacy">Privacy</a>
+    </div>
+</footer>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/ModalTest.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch('/TicketNotes/MyActiveNotes')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then(notes => {
+                const notesDropdown = document.getElementById("myNotesList");
+                notesDropdown.innerHTML = ""; // Clear previous items
+
+                if (notes.length === 0) {
+                    notesDropdown.innerHTML = '<li><span class="dropdown-item">No active notes</span></li>';
+                    return;
+                }
+
+                notes.forEach(note => { 
+                    let listItem = document.createElement("li");
+                    let noteLink = document.createElement("a");
+
+                    noteLink.classList.add("dropdown-item");
+                    noteLink.href = `/TicketNotes/View/${note.id}`; // Adjust link as needed
+                    noteLink.textContent = note.name;
+
+                    listItem.appendChild(noteLink);
+                    notesDropdown.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching active notes:", error);
+                document.getElementById("myNotesList").innerHTML = '<li><span class="dropdown-item text-danger">Error loading notes</span></li>';
+            });
+    });
+</script>
+
+@await RenderSectionAsync("Scripts", required: false)
+ </body>
+ </html>
+
+@* <!DOCTYPE html> *@
+@* <html lang="en"> *@
+@* <head> *@
+@*     <meta charset="utf-8" /> *@
+@*     <meta name="viewport" content="width=device-width, initial-scale=1.0" /> *@
+@*     <title>@ViewData["Title"] - WebTester</title> *@
+@*     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
+@*     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" /> *@
+@*     <link rel="stylesheet" href="~/WebTester.styles.css" asp-append-version="true" /> *@
+@* </head> *@
+@* <body> *@
+@*     <header> *@
+@*         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"> *@
+@*             <div class="container"> *@
+@*                 <a class="navbar-brand" asp-area="" asp-page="/Index">WebTester</a> *@
+@*                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" *@
+@*                         aria-expanded="false" aria-label="Toggle navigation"> *@
+@*                     <span class="navbar-toggler-icon"></span> *@
+@*                 </button> *@
+@*                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between"> *@
+@*                     <ul class="navbar-nav flex-grow-1"> *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a> *@
+@*                         </li> *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a> *@
+@*                         </li> *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="nav-link text-dark" asp-area="" asp-page="/Form">Form</a> *@
+@*                         </li> *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="nav-link text-dark" asp-area="" asp-page="/Organizations/Index">Organizations</a> *@
+@*                         </li> *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="nav-link text-dark" asp-area="" asp-page="/Tickets/Index">Tickets</a> *@
+@*                         </li> *@
+@*                         <li class="nav-item"> *@
+@*                             <a class="nav-link text-dark" asp-area="" asp-page="/Employees/Index">Employees</a> *@
+@*                         </li> *@
+@*                     </ul> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </nav> *@
+@*     </header> *@

@@ -1,0 +1,118 @@
+﻿@page "{id:int?}"
+@model WebTester.Pages.Employees.EditModel
+@{
+    var photoPath = "~/images/" + (Model.Employee.Image ?? "nologo.png");
+    var pageHeader = Model.Employee.Id > 0 ? "Edit Employee" : "Create Employee";
+}
+
+<h1>@pageHeader</h1>
+
+<form method="post" class="mt-3" enctype="multipart/form-data">
+    <input hidden asp-for="Employee.Id" />
+    <input hidden asp-for="Employee.Image" />
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <!-- First Name -->
+    <div class="form-group row">
+        <label asp-for="Employee.FirstName" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Employee.FirstName" class="form-control" placeholder="First Name" />
+            <span asp-validation-for="Employee.FirstName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Last Name -->
+    <div class="form-group row">
+        <label asp-for="Employee.LastName" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Employee.LastName" class="form-control" placeholder="Last Name" />
+            <span asp-validation-for="Employee.LastName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Display Name -->
+    <div class="form-group row">
+        <label asp-for="Employee.DisplayName" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Employee.DisplayName" class="form-control" placeholder="Display Name" />
+            <span asp-validation-for="Employee.DisplayName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group row">
+        <label asp-for="Employee.PrimaryEmail" class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="Employee.PrimaryEmail" type="email" class="form-control" placeholder="Email" />
+            <span asp-validation-for="Employee.PrimaryEmail" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Organization Selection -->
+    <div class="form-group row">
+        <label asp-for="organization" class="col-sm-2 col-form-label">Organization</label>
+        <div class="col-sm-10">
+            <select asp-for="organization" asp-items="Model.OrgList" class="form-select">
+                <option value="">-- Select Organization --</option>
+            </select>
+            <span asp-validation-for="organization" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Created Date -->
+    <div class="form-group row">
+        <label asp-for="Employee.Created" class="col-sm-2 col-form-label">Created</label>
+        <div class="col-sm-10">
+            <input asp-for="Employee.Created" type="datetime-local" class="form-control" />
+            <span asp-validation-for="Employee.Created" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Modified Date -->
+    <div class="form-group row">
+        <label asp-for="Employee.Modified" class="col-sm-2 col-form-label">Modified</label>
+        <div class="col-sm-10">
+            <input asp-for="Employee.Modified" type="datetime-local" class="form-control" />
+            <span asp-validation-for="Employee.Modified" class="text-danger"></span>
+        </div>
+    </div>
+
+    <!-- Image Upload -->
+    <div class="form-group row">
+        <label asp-for="Employee.Image" class="col-sm-2 col-form-label">Photo</label>
+        <div class="col-sm-10">
+            <div class="custom-file">
+                <input asp-for="Employee.Image" class="custom-file-input form-control" type="file">
+                <label class="custom-file-label">Upload Image</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Preview -->
+    <div class="form-group row col-sm-4 offset-4">
+        <img class="imageThumbnail" src="@photoPath" asp-append-version="true" />
+    </div>
+
+    <!-- Submit & Cancel Buttons -->
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-page="/Employees/Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script>
+            $(document).ready(function () {
+                $('.custom-file-input').on("change", function () {
+                    var fileName = $(this).val().split("\\").pop();
+                    $(this).next('.custom-file-label').html(fileName)
+                })
+            });
+        </script>
+
+        <partial name="_ValidationScriptsPartial" />
+    }
+</form>
+
